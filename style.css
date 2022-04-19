@@ -24,6 +24,52 @@ body{
     height: 5vh;
 }
 
+.startButton{
+    margin-top: 2vh;
+    width: 20vw;
+    height: 5vh;
+    margin-bottom: 2vh;
+}
+.gameMode-parent{
+    position: fixed;
+    top: 0;
+    height: 0;
+    height: 100vh;
+    width: 100%;
+    display:none;
+}
+.gameMode{
+    display: none;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 40vw;
+    height: 20vh;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    background-color:white ;
+}
+
+.modeButtons {
+    width: 20vw;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modeButtons > button{
+    width: 10vw;
+    height: 4vh;
+    margin: 2%;
+}
+    
+
 .cell{
     border: 2px solid black;
     width: 100px;

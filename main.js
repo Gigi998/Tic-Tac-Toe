@@ -5,20 +5,43 @@ const gameBoard = (() => {
         board.push("");
     };
 
+    let classisGame = false
     // Counter
     let counter = 1;
 
-    // Board element
     let cells = document.querySelector(".board");
-
-    // Restart button element
     let restartButtonEL = document.querySelector(".restartButton");
+    let startButtonEL = document.querySelector(".startButton");
+    let classicGameEl = document.querySelector(".classic");
+    let AIgameEl = document.querySelector(".AIgame");
+
+    // Classis game event listener
+    classicGameEl.addEventListener("click", () => {
+        document.querySelector(".gameMode-parent").style.display = "none";
+        alert("X is first");
+        classisGame = true;
+    });
+
+    AIgameEl.addEventListener("click", () => {
+        document.querySelector(".gameMode-parent").style.display = "none";
+    })
 
     // Restart button event listener
     restartButtonEL.addEventListener("click", restartGame)
+
+    // Start game function
+    startButtonEL.addEventListener("click", startGame)
+
+    // Start game function
+    function startGame(){
+        document.querySelector(".gameMode-parent").style.display = "block";
+    }
         
+    // Restart game function
     function restartGame(){
-        board = ["","","","","","","","",""];
+        for(let i = 0; i < 9; i++){
+            gameBoard.board[i] = "";
+        };
         // Restarting counter
         gameBoard.counter = 1;
         // Children element
@@ -44,7 +67,7 @@ const gameBoard = (() => {
             // You can not take spots that are already taken
             if(board[index] !== ""){
                 console.log("That spot is already taken!!")
-            }else{
+            }else if(classisGame){
                 counter += 1;
                     // Add value in array
                 board[index] = game.currentPlayer;
@@ -54,14 +77,20 @@ const gameBoard = (() => {
                 /*cell.style.pointerEvents = "none";*/
                 // Chech winner function
                 game.checkWinner()
+                // Check tie function
+                game.checkTie();
                 // Change player function
                 game.changePLayer();
 
-                game.checkTie();
-                };
+                AI.availableCells()
+
+                /*AI.randomPosition()
+
+                AI.checkPosition()*/
+            };
         });
     });
-    
+
     return{board,
         counter,
         restartGame}
@@ -87,18 +116,21 @@ const game = (() => {
     function checkWinner(){
         winningConditions.forEach((index) => {
             if(gameBoard.board[index[0]] === this.currentPlayer && gameBoard.board[index[1]] === this.currentPlayer && gameBoard.board[index[2]] === this.currentPlayer){
-                alert(this.currentPlayer + " won!")
-            }
-        })
+                alert(this.currentPlayer + " has won!")
+                gameBoard.restartGame()
+            };
+        });
     };
 
     // Check tie function
     function checkTie(){
         if(gameBoard.counter === 9){
-            console.log("It is a tie")
+            alert("It is a tie")
+            gameBoard.restartGame()
+        }else{
+            gameBoard.counter += 1;
         }
-        gameBoard.counter += 1
-    }
+    };
 
     // Winning conditions
     const winningConditions = [
@@ -115,9 +147,51 @@ const game = (() => {
     return {
         currentPlayer, 
         changePLayer,
-        checkWinner,
-        checkTie
+        checkTie,
+        checkWinner
     };
+})();
+
+// AI object
+const AI = (() => {
+
+    let availableSpots = []
+    let AIPosition 
+    // Finding available cells on board
+    function availableCells(){
+        availableSpots = []
+        for(let i = 0; i < 9; i++){
+            if(gameBoard.board[i] === ""){
+                availableSpots.push(i)
+            }else{
+                console.log("That spot is not available")
+            };
+        console.log(i)
+        };
+    };
+
+    // Random cell generator
+    function randomPosition(){
+        AIPosition = (Math.floor(Math.random() * 9) + 1);
+        
+    }
+
+    // Check position function
+    function checkPosition(){
+        for(let i = 0; i < availableSpots.length; i++){
+            if(AIPosition === availableSpots[i]){
+                console.log(AIPosition)
+            }else{
+                console.log("no")
+            }
+        };
+    };
+
+    return{
+        availableCells,
+        randomPosition,
+        checkPosition,
+    }
 })();
 
 
