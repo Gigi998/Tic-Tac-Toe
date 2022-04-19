@@ -82,9 +82,9 @@ const gameBoard = (() => {
                 // Change player function
                 game.changePLayer();
 
-                AI.availableCells()
+                /*AI.availableCells()
 
-                /*AI.randomPosition()
+                AI.randomPosition()
 
                 AI.checkPosition()*/
             };
