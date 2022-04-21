@@ -5,12 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="main.js" defer></script>
     <title>Tic tac toe</title>
 </head>
 <body>
     <h1>Tic tac toe</h1>
     <div class="board">
+        <div class="cell" id="cell1"></div>
+        <div class="cell" id="cell2"></div>
+        <div class="cell" id="cell3"></div>
+        <div class="cell" id="cell4"></div>
+        <div class="cell" id="cell5"></div>
+        <div class="cell" id="cell6"></div>
+        <div class="cell" id="cell7"></div>
+        <div class="cell" id="cell8"></div>
+        <div class="cell" id="cell9"></div>
     </div>
     <button type="onclick" class="restartButton">Restart game</button>
     <button type="onclick" class="startButton">Start game</button>
@@ -23,7 +31,13 @@
                 <button type="onclick" class="classic">2 players</button>
                 <button class="AIgame">AI</button>
             </div>
+            <div class="difficultyButtons">
+                <button>Easy</button>
+                <button>Medium</button>
+                <button>Hard</button>
+            </div>
         </div>
     </div>
+    <script src="./main.js" ></script>
 </body>
 </html>

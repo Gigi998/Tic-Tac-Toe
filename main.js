@@ -1,13 +1,14 @@
 const gameBoard = (() => {
+
     //Board
     let board = [];
     for (i = 0; i < 9; i++){
         board.push("");
     };
 
-    let classisGame = false
+    let AIGame = false
     // Counter
-    let counter = 1;
+    let counter = 0;
 
     let cells = document.querySelector(".board");
     let restartButtonEL = document.querySelector(".restartButton");
@@ -19,11 +20,12 @@ const gameBoard = (() => {
     classicGameEl.addEventListener("click", () => {
         document.querySelector(".gameMode-parent").style.display = "none";
         alert("X is first");
-        classisGame = true;
     });
 
     AIgameEl.addEventListener("click", () => {
         document.querySelector(".gameMode-parent").style.display = "none";
+        gameBoard.restartGame()
+        AIGame = true;
     })
 
     // Restart button event listener
@@ -43,7 +45,7 @@ const gameBoard = (() => {
             gameBoard.board[i] = "";
         };
         // Restarting counter
-        gameBoard.counter = 1;
+        gameBoard.counter = 0;
         // Children element
         let cellsChildrens = cells.children;
         // Restart current player
@@ -52,14 +54,8 @@ const gameBoard = (() => {
         for(let i = 0; i < 9; i ++){
             cellsChildrens[i].innerHTML = "";
         };
-    }
-
-    // Making tic-tac-toe grid 
-    board.forEach((item) => {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        cells.appendChild(cell);
-    });
+        AIGame = false
+    };
 
     // Turning object in grid and placing x or o value in board array
     Array.from(cells.children).forEach((cell, index) => {
@@ -67,33 +63,28 @@ const gameBoard = (() => {
             // You can not take spots that are already taken
             if(board[index] !== ""){
                 console.log("That spot is already taken!!")
-            }else if(classisGame){
-                counter += 1;
-                    // Add value in array
+            }else{
+                gameBoard.counter += 1;
+                // Add value in array
                 board[index] = game.currentPlayer;
                 // Add value on screen
                 cell.innerHTML = game.currentPlayer;
-                // Moving event listener on clicked cells
-                /*cell.style.pointerEvents = "none";*/
-                // Chech winner function
-                game.checkWinner()
-                // Check tie function
-                game.checkTie();
-                // Change player function
-                game.changePLayer();
-
-                /*AI.availableCells()
-
-                AI.randomPosition()
-
-                AI.checkPosition()*/
+                // handle winner and who's turn is
+                game.handleLogic()
+                // If AIGame execute this
+                if(AIGame){
+                    // Check available position update board and display it
+                    AI.AIMove();
+                    game.handleLogic();
+                };
             };
         });
     });
 
     return{board,
         counter,
-        restartGame}
+        restartGame,
+        AIGame}
 
 })();
 
@@ -102,6 +93,12 @@ const game = (() => {
     //Current player
     let currentPlayer = "X"
 
+    // Function that executes after player move
+    function handleLogic(){
+        game.checkWinner()
+        game.checkTie()
+        game.changePLayer()
+    };
     // Change player function
     function changePLayer(){
 
@@ -127,9 +124,7 @@ const game = (() => {
         if(gameBoard.counter === 9){
             alert("It is a tie")
             gameBoard.restartGame()
-        }else{
-            gameBoard.counter += 1;
-        }
+        };
     };
 
     // Winning conditions
@@ -148,7 +143,8 @@ const game = (() => {
         currentPlayer, 
         changePLayer,
         checkTie,
-        checkWinner
+        checkWinner,
+        handleLogic
     };
 })();
 
@@ -156,75 +152,32 @@ const game = (() => {
 const AI = (() => {
 
     let availableSpots = []
-    let AIPosition 
     // Finding available cells on board
     function availableCells(){
         availableSpots = []
         for(let i = 0; i < 9; i++){
             if(gameBoard.board[i] === ""){
-                availableSpots.push(i)
-            }else{
-                console.log("That spot is not available")
+                availableSpots.push(i + 1)
             };
-        console.log(i)
         };
     };
 
     // Random cell generator
-    function randomPosition(){
-        AIPosition = (Math.floor(Math.random() * 9) + 1);
-        
+    function AIMove(){
+        availableCells()
+        // Random number
+        let AIPosition = Math.floor(Math.random() * (availableSpots.length - 1));
+        // Targeting cell element
+        const el = document.getElementById("cell" + availableSpots[AIPosition]);
+        // Display on screen
+        el.innerHTML = game.currentPlayer;
+        // Update in board array
+        gameBoard.board[availableSpots[AIPosition] - 1] = game.currentPlayer;
     }
-
-    // Check position function
-    function checkPosition(){
-        for(let i = 0; i < availableSpots.length; i++){
-            if(AIPosition === availableSpots[i]){
-                console.log(AIPosition)
-            }else{
-                console.log("no")
-            }
-        };
-    };
 
     return{
         availableCells,
-        randomPosition,
-        checkPosition,
+        AIMove,
     }
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
